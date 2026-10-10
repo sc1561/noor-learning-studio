@@ -1,0 +1,6 @@
+const assert=require('node:assert/strict'),C=require('../assets/core.js'),data=require('../content/catalog.json');
+global.TeachCore=C;const L=require('../assets/labs.js');
+const g=data.courses.find(c=>c.grade===9),lessons=g.units.flatMap(u=>u.lessons),lesson=lessons[0],meetings=lesson.meetings,periods=meetings.flatMap(m=>m.periods);
+assert.equal(g.status,'draft');assert.equal(g.units.length,1);assert.equal(g.units[0].title,'قواعد البيانات');assert.equal(lesson.title,'تصميم النماذج');assert.equal(lesson.goalSource,'draft');assert.equal(lesson.officialPeriods,4);assert.equal(meetings.length,2);assert.equal(periods.length,4);assert.ok(periods.every(p=>!p.reinforcement));assert.ok(meetings.every(m=>m.goalBinding==='draft'));assert.equal(lesson.quiz.length,10);assert.equal(lesson.lab,'access-forms');assert.match(L.render('access-forms'),/labRecordSource/);
+const elems={labRecordSource:{value:'customers'},labLookup:{value:'combo'},labLink:{value:'customer'},labResult:{}};const doc={querySelector:()=>({dataset:{lab:'access-forms'}}),getElementById:id=>elems[id]};L.update(doc);assert.match(elems.labResult.innerHTML,/اكتمل تصميم الربط الصحيح/);elems.labLink.value='price';L.update(doc);assert.match(elems.labResult.innerHTML,/راجع الاختيارات/);
+console.log('PASS Grade 9: database unit draft, two double-period meetings, 10 questions and Access forms lab.');
