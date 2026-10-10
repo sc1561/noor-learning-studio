@@ -1,7 +1,7 @@
 (()=>{'use strict';const norm=s=>String(s??'').normalize('NFKC').replace(/[\u064b-\u065f\u0670\u200e\u200f\u0640]/g,'').replace(/[أإآ]/g,'ا').replace(/\s+/g,' ').trim();const visible=e=>!!(e&&e.getClientRects().length);const pause=ms=>new Promise(r=>setTimeout(r,ms));let owned=false;
 async function wait(fn,message,time=20000){const start=Date.now();while(Date.now()-start<time){const found=fn();if(found)return found;await pause(150);}throw Error(message);}
 const page=()=>window.wrappedJSObject;
-function treeName(a){const clone=a.cloneNode(true);for(const badge of clone.querySelectorAll('.label,.badge,[class*=label-],[class*=badge-]'))badge.remove();return norm(clone.textContent).replace(/^(?:درس|وحدة|فصل|كتاب)\s*/,'').replace(/\s*(?:درس|وحدة|فصل|كتاب)$/,'').trim();}
+function treeName(a){const clone=a.cloneNode(true);for(const badge of clone.querySelectorAll('.label,.badge,[class*=label-],[class*=badge-]'))badge.remove();return norm(clone.textContent).replace(/^(?:درس|وحدة|فصل|كتاب)\s*/,'').replace(/\s*(?:درس|وحدة|فصل|كتاب)$/,'').replace(/\s+Data\s*Base$/i,'').trim();}
 const get=(text,scope=document)=>Array.from(scope.querySelectorAll('[role="tree"] a,.jstree a')).find(a=>visible(a)&&treeName(a)===norm(text));
 function check(e,on){if(!e)return;if(e.checked!==on)e.click();if(e.checked!==on)throw Error('لم يثبت خيار النموذج');}
 function trigger(e){e.dispatchEvent(new Event('input',{bubbles:true}));e.dispatchEvent(new Event('change',{bubbles:true}));const jq=page().jQuery;if(jq){jq(e).trigger('change');jq(e).trigger('chosen:updated');}}
