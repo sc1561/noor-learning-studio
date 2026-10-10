@@ -1,0 +1,11 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const C=require('../assets/core.js'),data=require('../content/catalog.json');global.TeachCore=C;global.Grade6Labs=require('../assets/grade6-labs.js');const L=require('../assets/labs.js');
+const g=data.courses.find(c=>c.grade===6),ls=g.units.flatMap(u=>u.lessons),ms=ls.flatMap(l=>l.meetings),ps=ms.flatMap(m=>m.periods);
+C.validate(data);assert.equal(g.contentStatus,'complete');assert.deepEqual(g.units.map(u=>u.officialPeriods),[10,12,8]);assert.deepEqual(g.units.map(u=>u.lessons.length),[5,4,4]);assert.equal(ms.length,17);assert.equal(ps.filter(p=>!p.reinforcement).length,30);assert.equal(ps.filter(p=>p.reinforcement).length,4);assert.equal(ls.reduce((n,l)=>n+l.quiz.length,0),65);assert.ok(ms.every(m=>m.goalBinding==='draft'));assert.ok(ps.every(p=>p.outcomes.every(o=>!o.id)));
+for(const l of ls){assert.match(L.render(l.lab),/labResult/);assert.ok(l.schedule.start<=l.schedule.end);for(const r of l.resources)if(!r.path.startsWith('https:'))assert.ok(fs.existsSync(path.join(__dirname,'..',r.path)));}
+function run(kind,values){const output={};const doc={querySelector:()=>({dataset:{lab:kind}}),getElementById:id=>id==='labResult'?output:({value:String(values[id]??'')})};L.update(doc);return output.innerHTML||output.textContent;}
+assert.match(run('g6-calculate',{g6values:'20,30,40,10',g6fn:'AVERAGE'}),/= 25/);assert.match(run('g6-calculate',{g6values:'20,,10',g6fn:'SUM'}),/أدخل/);assert.match(run('g6-calculate',{g6values:'20,<script>,10',g6fn:'SUM'}),/أدخل/);
+assert.match(run('g6-organize',{g6filter:'علوم',g6sort:'desc'}),/عرض 2 من 4/);assert.match(run('g6-organize',{g6filter:'all',g6sort:'asc'}),/عرض 4 من 4/);
+assert.match(run('g6-holder',{g6length:60,g6width:40,g6height:50,g6wall:3,g6group:'group'}),/54 × 34 × 47/);assert.match(run('g6-holder',{g6length:60,g6width:40,g6height:50,g6wall:20,g6group:'group'}),/السماكة/);assert.match(run('g6-holder',{g6length:60,g6width:40,g6height:50,g6wall:3,g6group:'none'}),/يلزم التجميع/);
+assert.match(run('g6-safety',{g6decision:'report'}),/قرار مناسب/);assert.match(run('g6-digital-project',{g6decision:'credit'}),/راجع قرارك/);
+console.log('PASS Grade 6: 13 lessons, 17 meetings, 30 official + 4 reinforcement periods, 65 questions, attachments and simulations.');
