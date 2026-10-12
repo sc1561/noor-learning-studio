@@ -2,7 +2,7 @@
 async function wait(fn,message,time=20000){const start=Date.now();while(Date.now()-start<time){const found=fn();if(found)return found;await pause(150);}throw Error(message);}
 const page=()=>window.wrappedJSObject;
 function treeName(a){const clone=a.cloneNode(true);for(const badge of clone.querySelectorAll('.label,.badge,[class*=label-],[class*=badge-]'))badge.remove();return norm(clone.textContent).replace(/^(?:درس|وحدة|فصل|كتاب)\s*/,'').replace(/\s*(?:درس|وحدة|فصل|كتاب)$/,'').replace(/\s+Data\s*Base$/i,'').trim();}
-function lessonKey(s){const n=norm(s);const aliases={'مقدمة في شبكات الحاسوب':'مقدمة في الشبكات','مقدمة في برنامج محاكاة الشبكات Packet Tracer':'مقدمة في برنامج محاكاة الشبكات','مقدمة في برنامج محاكات الشبكات':'مقدمة في برنامج محاكاة الشبكات','ربط الشبكات المحلية':'الربط بين الشبكات'};return aliases[n]||n;}
+function lessonKey(s){const n=norm(s);const aliases={'تصميم موقع ويب':'تصميم مواقع الويب','مقدمة في شبكات الحاسوب':'مقدمة في الشبكات','مقدمة في برنامج محاكاة الشبكات Packet Tracer':'مقدمة في برنامج محاكاة الشبكات','مقدمة في برنامج محاكات الشبكات':'مقدمة في برنامج محاكاة الشبكات','ربط الشبكات المحلية':'الربط بين الشبكات'};return aliases[n]||n;}
 const get=(text,scope=document)=>Array.from(scope.querySelectorAll('[role="tree"] a,.jstree a')).find(a=>visible(a)&&lessonKey(treeName(a))===lessonKey(text));
 function check(e,on){if(!e)return;if(e.checked!==on)e.click();if(e.checked!==on)throw Error('لم يثبت خيار النموذج');}
 function trigger(e){e.dispatchEvent(new Event('input',{bubbles:true}));e.dispatchEvent(new Event('change',{bubbles:true}));const jq=page().jQuery;if(jq){jq(e).trigger('change');jq(e).trigger('chosen:updated');}}
