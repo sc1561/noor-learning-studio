@@ -1,5 +1,5 @@
 (()=>{'use strict';
-const EXTENSION_VERSION='1.8.1',DEBUG_URL='about:debugging#/runtime/this-firefox';
+const EXTENSION_VERSION='1.9.0',DEBUG_URL='about:debugging#/runtime/this-firefox';
 const C=TeachCore,$=id=>document.getElementById(id),E=C.esc,copy=x=>JSON.parse(JSON.stringify(x));
 const storeKey='noor-studio-v1',dataKey='noor-studio-catalog-v1';let data=copy(window.NOOR_CATALOG),state={role:'student',theme:'light',sound:false,favorites:[],progress:{},notes:{},checks:{},answers:{}},grade=8,courseId='g8-it-s1',unitFilter='all',search='',onlyFavorite=false,tab='learn',meetingIndex=0,quizIndex=0,order=null,clock={remaining:2400,interval:null},edit=null,toastTimer,slideIndex=0;
 try{const s=JSON.parse(localStorage.getItem(storeKey)||'null');if(s&&typeof s==='object')state={...state,...s};const local=JSON.parse(localStorage.getItem(dataKey)||'null');if(local){data=C.mergeCatalog(local,window.NOOR_CATALOG);}}catch(e){console.warn('Local data was unavailable; using bundled content.');}
