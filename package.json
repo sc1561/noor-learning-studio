@@ -1,10 +1,10 @@
 {
   "name": "noor-learning-studio",
-  "version": "1.19.0",
+  "version": "1.20.0",
   "private": true,
   "description": "Arabic lesson library and Noor preparation extension",
   "scripts": {
-    "test": "node scripts/test.js && node scripts/test-extension.js && node scripts/test-app.js && node scripts/test-grade8.js && node scripts/test-grade9.js && node scripts/test-grade5.js && node scripts/test-grade6.js && node scripts/test-grade12.js && node scripts/test-grade10.js && node scripts/test-grade7-pilot.js && node scripts/test-grade7-general.js && node scripts/test-question-bank.js",
+    "test": "node scripts/test.js && node scripts/test-extension.js && node scripts/test-app.js && node scripts/test-grade8.js && node scripts/test-grade9.js && node scripts/test-grade5.js && node scripts/test-grade6.js && node scripts/test-grade12.js && node scripts/test-grade10.js && node scripts/test-grade7-pilot.js && node scripts/test-grade7-general.js && node scripts/test-question-bank.js && node scripts/test-development.js",
     "build": "node scripts/build.js",
     "serve": "python3 -m http.server 8000"
   },
