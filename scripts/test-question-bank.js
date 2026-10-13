@@ -1,0 +1,6 @@
+const assert=require('assert'),fs=require('fs'),vm=require('vm');
+const ctx={window:{},localStorage:{getItem:()=>JSON.stringify({selected:['g10-intro-08','g10-intro-14'],reviewed:[]}),setItem:()=>{}}};vm.createContext(ctx);vm.runInContext(fs.readFileSync('assets/question-bank-data.js','utf8'),ctx);vm.runInContext(fs.readFileSync('assets/question-bank.js','utf8'),ctx);const b=ctx.window.NOOR_QUESTION_BANK;
+assert.equal(b.questions.length,16);assert.equal(new Set(b.questions.map(q=>q.id)).size,16);
+for(const q of b.questions){assert.equal(q.marks,q.rubric.reduce((n,r)=>n+r.marks,0));assert(q.outcome&&q.answer!==undefined&&q.status==='مسودة للمراجعة');if(q.type==='mcq'){assert.equal(q.options.length,4);assert(Number.isInteger(q.answer)&&q.answer>=0&&q.answer<4);}else assert(q.rubric.length>1);}
+assert.deepEqual(['mcq','short','long'].map(t=>b.questions.filter(q=>q.type===t).length),[6,6,4]);
+const api=ctx.window.NoorQuestionBank,student=api.sheet(false),teacher=api.sheet(true);assert(!student.includes('الإجابة النموذجية'));assert(teacher.includes('الإجابة النموذجية'));assert(student.includes('&lt;title&gt;'));assert(!student.includes('<title>نادي التقنية</title>'));assert(student.includes('مسودات تحتاج مراجعة'));assert(teacher.includes('سلم التصحيح'));console.log('Question bank: content, marks, escaped code and separate sheets passed.');
